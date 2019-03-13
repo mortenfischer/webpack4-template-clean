@@ -12,7 +12,8 @@ module.exports = {
     entry: {
         app: './src/js/index.js',
         polyfill: 'babel-polyfill',
-        styling: './src/scss/style.scss'
+        styling: './src/scss/style.scss',
+        bootstrap: './src/scss/bootstrap/bootstrap.scss'
     },
     output: {
         //filename: '[name].js',
@@ -26,7 +27,8 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env'] // webpack docs is wrong here, it suggests using @babel/preset-env which is wrong
+                        presets: ['env'], 
+                        plugins: ["transform-object-rest-spread"]
                     }
                 }
             },
@@ -36,6 +38,7 @@ module.exports = {
                     path.resolve(__dirname, "../src/scss")
                 ],
                 use: [
+                    "postcss-loader",
                     'css-loader',
                     "sass-loader"
                 ]

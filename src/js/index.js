@@ -1,1 +1,3 @@
-console.log("hello world")
+// prepare bootstrap plugins
+import "./bootstrap"
+
