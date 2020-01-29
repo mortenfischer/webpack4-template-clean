@@ -1,19 +1,11 @@
 const path = require('path');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
-
-const extractSass = new ExtractTextPlugin({
-    filename: "[name].css"
-    // Issue with outputting unwanted jsfiles based on entry.
-    // The following plugin can delete unwanted files, but it seems too early to include at this point 2018-03-01.
-    // https://github.com/webpack-contrib/extract-text-webpack-plugin/issues/518
-});
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: {
-        app: './src/js/index.js',
+        app: './src/index.js',
         polyfill: 'babel-polyfill',
-        styling: './src/scss/style.scss',
-        bootstrap: './src/scss/bootstrap/bootstrap.scss'
+        styling: './src/style.scss',
     },
     output: {
         //filename: '[name].js',
@@ -27,39 +19,33 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env'], 
-                        plugins: ["transform-object-rest-spread"]
+                        presets: ['@babel/preset-env'], 
+                        plugins: ["@babel/plugin-proposal-object-rest-spread"]
                     }
                 }
             },
             {
                 test: /\.scss$/,
                 exclude: [
-                    path.resolve(__dirname, "../src/scss")
+                    path.resolve(__dirname, "../src/foundation/scss")
                 ],
                 use: [
-                    "postcss-loader",
+                    {
+                    loader: MiniCssExtractPlugin.loader,
+                        options: {},
+                    },
                     'css-loader',
                     "sass-loader"
                 ]
-            },
-            {
-                test: /\.scss$/,
-                exclude: [
-                    path.resolve(__dirname, "../src/js")
-                ],
-                use: extractSass.extract({
-                    use: [{
-                        loader: "css-loader"
-                    },{
-                        loader: "sass-loader"
-                    }]
-                })
             }
         ]
     },
     plugins: [
-        extractSass    
+    new MiniCssExtractPlugin({
+        // Options similar to the same options in webpackOptions.output
+        // all options are optional
+        filename: '[name].css'
+    }),
     ]
 };
 

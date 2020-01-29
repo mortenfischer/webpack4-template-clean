@@ -1,0 +1,9 @@
+@import "./foundation/scss/variables";
+
+BODY{
+    color: $bodytext;
+    font-size: 16px;
+}
+.test {
+    background-color: rebeccapurple;
+}
